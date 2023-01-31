@@ -16,14 +16,16 @@ def neighbours_fn(x, y, x_max, y_max):
     deltas_y = (-1, 0, 1)
     for (dx, dy) in itertools.product(deltas_x, deltas_y):
         x_new, y_new = x + dx, y + dy
-        if 0 <= x_new < x_max and 0 <= y_new < y_max and (dx, dy) != (0, 0):
+        size = np.abs(dx) + np.abs(dy)
+        if 0 <= x_new < x_max and 0 <= y_new < y_max and size == 1: # restriction on size means we eliminate diagonal neighbors
             yield x_new, y_new
 
 
 def dijkstra(matrix):
     """
     Implementation of Dijkstra algorithm to find the (s,t)-shortest path between top-left and bottom-right nodes
-    on a nxn grid graph (with 8-neighbourhood).
+    on a nxn grid graph (with 4-neighbourhood).
+    DM: Modified from 8-neighbourhood ot 4-neighbourhood 01/31/2023
     NOTE: This is an vertex variant of the problem, i.e. nodes carry weights, not edges.
     :param matrix (np.ndarray [grid_dim, grid_dim]): Matrix of node-costs.
     :return: matrix (np.ndarray [grid_dim, grid_dim]), indicator matrix of nodes on the shortest path.
